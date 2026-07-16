@@ -1,0 +1,47 @@
+name: Portfolio Integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify-showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify public showcase contract
+        shell: bash
+        run: |
+          test -s README.md
+          test -s SECURITY.md
+          test -s CONTRIBUTING.md
+          test -s RIGHTS.md
+          test -s NOTICE.md
+          test -s assets/social-preview.png
+          python - <<'PY'
+          import re
+          import struct
+          from pathlib import Path
+
+          image = Path("assets/social-preview.png").read_bytes()
+          assert image[:8] == b"\x89PNG\r\n\x1a\n"
+          width, height = struct.unpack(">II", image[16:24])
+          assert (width, height) == (1280, 640), (width, height)
+
+          readme = Path("README.md").read_text(encoding="utf-8")
+          for target in re.findall(r"!?\[[^]]*\]\(([^)]+)\)", readme):
+              target = target.split("#", 1)[0]
+              if not target or "://" in target or target.startswith("mailto:"):
+                  continue
+              assert Path(target).exists(), f"Missing local README target: {target}"
+          PY
+      - name: Scan committed history for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
