@@ -4,6 +4,7 @@
 
 [![Live product](https://img.shields.io/badge/Live_Product-cvpro.globalapps.world-1748d4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://cvpro.globalapps.world/)
 [![Commercial source](https://img.shields.io/badge/Source-Private-111827?style=for-the-badge&logo=github)](#commercial-source-notice)
+[![Portfolio integrity](https://github.com/NilhanHub/CV-Pro-Showcase/actions/workflows/portfolio-integrity.yml/badge.svg)](https://github.com/NilhanHub/CV-Pro-Showcase/actions/workflows/portfolio-integrity.yml)
 
 ![CV Pro product gallery](assets/cv-pro-social-gallery.png)
 
